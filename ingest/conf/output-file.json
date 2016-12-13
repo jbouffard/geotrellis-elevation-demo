@@ -1,7 +1,7 @@
 {
   "backend": {
     "type": "file",
-    "path": "/Volumes/Transcend/data/elevation-catalog"
+    "path": "elevation-catalog"
   },
   "reprojectMethod": "per-tile",
   "tileSize": 256,

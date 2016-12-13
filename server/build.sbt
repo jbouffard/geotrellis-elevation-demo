@@ -12,7 +12,7 @@ libraryDependencies ++= (
     "com.typesafe.akka" %% "akka-remote"  % akkaVersion,
     "com.typesafe.akka" %% "akka-actor"   % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
-    "com.azavea.geotrellis" %% "geotrellis-spark" % geotrellisVersion,
+    "org.locationtech.geotrellis" %% "geotrellis-spark" % "1.0.0-RC3",
     "io.spray"              %% "spray-can"        % sprayVersion,
     "io.spray"              %% "spray-routing"    % sprayVersion,
     "org.apache.hadoop"      % "hadoop-client"    % hadoopVersion,

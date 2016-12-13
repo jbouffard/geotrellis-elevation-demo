@@ -59,7 +59,13 @@ class ElevationServiceActor(override val staticPath: String, config: Config, val
 
   lazy val (reader, collectionReader, tileReader, attributeStore) = initBackend(config)
 
-  val layerNames = attributeStore.layerIds.map(_.name).distinct
+  def layerNames = {
+    println("THESE ARE THE LAYERIDS ----------------------------------------->>>>>>>>!!!!!!!!!!!!!!")
+    println(s"attributeStor = $attributeStore")
+    println(s"length = ${attributeStore.layerIds.size}")
+    println(attributeStore.layerIds.toList)
+    attributeStore.layerIds.map(_.name).distinct
+  }
 
   val breaksMap: Map[String, Array[Double]] =
     layerNames

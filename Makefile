@@ -16,8 +16,11 @@ ingest:
           --output "file:///ingest/conf/output.json" \
           --backend-profiles "file:///ingest/conf/backend-profiles.json"
 
-ingest-local:
+
+assembly-local:
 	sbt "project ingest" assembly
+
+ingest-local:
 	spark-submit \
 	  --master local[*] \
           --class geotrellis.elevation.Ingest --driver-memory 10G \
