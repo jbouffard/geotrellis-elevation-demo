@@ -1,7 +1,7 @@
 {
   "backend": {
     "type": "file",
-    "path": "/Volumes/Transcend/data/elevation-catalog"
+    "path": "/Users/nzimmerman/git_repos/geotrellis-elevation-demo/data/elevation-catalog"
   },
   "reprojectMethod": "per-tile",
   "tileSize": 256,

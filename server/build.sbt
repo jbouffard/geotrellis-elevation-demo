@@ -1,7 +1,7 @@
 name := "server"
 
 val akkaVersion = "2.4.10"
-val geotrellisVersion = "1.0.0-SNAPSHOT"
+val geotrellisVersion = "1.0.0-RC3"
 val hadoopVersion = "2.7.1"
 val sparkVersion = "2.0.1"
 val sprayVersion = "1.3.3"
@@ -12,7 +12,7 @@ libraryDependencies ++= (
     "com.typesafe.akka" %% "akka-remote"  % akkaVersion,
     "com.typesafe.akka" %% "akka-actor"   % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
-    "com.azavea.geotrellis" %% "geotrellis-spark" % geotrellisVersion,
+    "org.locationtech.geotrellis" %% "geotrellis-spark" % geotrellisVersion,
     "io.spray"              %% "spray-can"        % sprayVersion,
     "io.spray"              %% "spray-routing"    % sprayVersion,
     "org.apache.hadoop"      % "hadoop-client"    % hadoopVersion,

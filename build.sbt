@@ -29,7 +29,7 @@ lazy val commonSettings = Seq(
   },
 
   /** This resolver allows us to pull snapshot version from GeoTrellis's BinTray repository */
-  resolvers += Resolver.bintrayRepo("azavea", "geotrellis")
+  resolvers += "LocationTech GeoTrellis Snapshots" at "http://repo.locationtech.org/content/repositories/geotrellis-snapshots"
 )
 
 /**

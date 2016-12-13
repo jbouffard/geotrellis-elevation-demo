@@ -46,3 +46,4 @@ data/download_data
 
 # virtualenv
 env/
+data/elevation-catalog
