@@ -102,7 +102,23 @@ trait ElevationService
 
   def serviceRoute =
     path("catalog") { catalogRoute }  ~
-    pathPrefix("tiles")(tms) ~
+    pathPrefix("tiles") {
+      pathPrefix(Segment / IntNumber / IntNumber / IntNumber) { (layerName, zoom, x, y) =>
+        get {
+          rejectEmptyResponse {
+            parameters('colorRamp ? "blue-to-red") {
+              (colorRamp) => {
+                respondWithMediaType(MediaTypes.`image/png`) {
+                  complete {
+                    tms(layerName, zoom, x, y, colorRamp)
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } ~
     pathPrefix("mean")(polygonalMean) ~
     get {
       pathEndOrSingleSlash {
@@ -165,42 +181,29 @@ trait ElevationService
   }
 
   /** http://localhost:8777/tiles/elevation/{z}/{x}/{y}?colorRamp=blue-to-yellow-to-red-heatmap */
-  def tms = pathPrefix(PathElement / IntNumber / IntNumber / IntNumber) {
-    (layerName, zoom, x, y) => {
-      get {
-        parameters('colorRamp ? "blue-to-red") {
-          (colorRamp) => {
-            respondWithMediaType(MediaTypes.`image/png`) {
-              complete {
-                val key = SpatialKey(x, y)
+  def tms(path: String, zoom: Int, x: Int, y: Int, colorRamp: String): Option[Array[Byte]] = {
+    val key = SpatialKey(x, y)
 
-                val tileOpt =
-                  try {
-                    Some(
-                      tileReader
-                        .reader[SpatialKey, Tile](LayerId("elevation", zoom))
-                        .read(key)
-                    )
-                  } catch {
-                    case e: TileNotFoundError => None
-                  }
-
-                tileOpt.map { tile =>
-                  val breaks = breaksMap.getOrElse("elevation", throw new Exception)
-                  val colorMap =
-                    ColorRampMap.getOrElse(colorRamp, ColorRamps.BlueToRed)
-                      .toColorMap(breaks)
-
-                  tile.renderPng(colorMap).bytes
-                }
-              }
-            }
-          }
-        }
+    val tileOpt =
+      try {
+        Some(
+          tileReader
+            .reader[SpatialKey, Tile](LayerId("elevation", zoom))
+            .read(key)
+        )
+      } catch {
+        case e: TileNotFoundError => None
       }
+
+    tileOpt.map { tile =>
+      val breaks = breaksMap.getOrElse("elevation", throw new Exception)
+      val colorMap =
+        ColorRampMap.getOrElse(colorRamp, ColorRamps.BlueToRed)
+          .toColorMap(breaks)
+
+      tile.renderPng(colorMap).bytes
     }
   }
-
 
   /** http://localhost:8777/mean */
   def polygonalMean = {
