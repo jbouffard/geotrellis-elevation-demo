@@ -1,13 +1,18 @@
 get-data:
-	cd data && python download-and-preprocess.py lancaster-pa-1-meter.csv --download_dir download_data -o source
+	cd data && python3 download-and-preprocess.py lancaster-pa-1-meter.csv --download_dir download_data -o source
 
 # Imports preprocessed elevation data GeoTiffs into HDFS
 import:
 	docker-compose run hdfs-name hdfs dfs -copyFromLocal /data/source/ /source
 
+build-ingest:
+	./sbt "project ingest" assembly
+
+build-server:
+	./sbt "project ingest" assembly
+
 # Runs the GeoTrellis ingest into HDFS
 ingest:
-	sbt "project ingest" assembly
 	docker-compose run spark-master spark-submit \
 	  --master local[*] \
           --class geotrellis.elevation.Ingest --driver-memory 10G \
@@ -16,8 +21,10 @@ ingest:
           --output "file:///ingest/conf/output.json" \
           --backend-profiles "file:///ingest/conf/backend-profiles.json"
 
-ingest-local:
+assembly-local:
 	sbt "project ingest" assembly
+
+ingest-local:
 	spark-submit \
 	  --master local[*] \
           --class geotrellis.elevation.Ingest --driver-memory 10G \
@@ -27,7 +34,7 @@ ingest-local:
           --backend-profiles "file://${PWD}/ingest/conf/backend-profiles.json"
 
 server-local:
-	sbt "project server" assembly
+	./sbt "project server" assembly
 	spark-submit \
 	  --master local[*] --driver-memory 10G \
           --class geotrellis.elevation.Server \

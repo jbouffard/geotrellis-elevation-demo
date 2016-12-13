@@ -42,5 +42,4 @@ package object elevation {
       case s => throw new Exception(s"not supported backend: $s")
     }
   }
-
 }
