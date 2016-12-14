@@ -60,8 +60,7 @@ class ElevationServiceActor(override val staticPath: String, config: Config, val
   lazy val (reader, collectionReader, tileReader, attributeStore) = initBackend(config)
 
   def layerNames = {
-    println("THESE ARE THE LAYERIDS ----------------------------------------->>>>>>>>!!!!!!!!!!!!!!")
-    println(s"attributeStor = $attributeStore")
+    println(s"attributeStore = $attributeStore")
     println(s"length = ${attributeStore.layerIds.size}")
     println(attributeStore.layerIds.toList)
     attributeStore.layerIds.map(_.name).distinct
@@ -101,6 +100,7 @@ trait ElevationService
     attributeStore.readMetadata[TileLayerMetadata[SpatialKey]](id)
 
   def serviceRoute =
+    path("mean") { polygonalMean } ~
     path("catalog") { catalogRoute }  ~
     pathPrefix("tiles") {
       pathPrefix(Segment / IntNumber / IntNumber / IntNumber) { (layerName, zoom, x, y) =>
@@ -119,7 +119,6 @@ trait ElevationService
         }
       }
     } ~
-    pathPrefix("mean")(polygonalMean) ~
     get {
       pathEndOrSingleSlash {
         getFromFile(staticPath + "/index.html")

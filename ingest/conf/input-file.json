@@ -6,7 +6,7 @@
     "numPartitions": 100,
     "backend": {
       "type": "hadoop",
-      "path": "/Users/nzimmerman/git_repos/geotrellis-elevation-demo/data/source"
+      "path": "file:///data/source"
     },
     "cache": "NONE"
   }

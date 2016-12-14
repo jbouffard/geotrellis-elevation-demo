@@ -46,7 +46,7 @@ data/download_data
 
 # virtualenv
 env/
+
 data/source/*
 data/elevation-catalog/*
 data/tmp/*
-ingest/conf/*
